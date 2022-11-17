@@ -8,7 +8,7 @@ const { all, markAsComplete, add, overdue, dueToday, dueLater } = todoList();
 describe("TodoList test suite", () => {
   beforeAll(() => {
     add({
-      title: "Test todo",
+      title: "Test todo 1",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
@@ -17,7 +17,7 @@ describe("TodoList test suite", () => {
   test("should add new todo", () => {
     const todoItemCount = all.length;
     add({
-      title: "Test todo",
+      title: "Test todo 1",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
