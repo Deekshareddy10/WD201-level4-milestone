@@ -1,65 +1,66 @@
 
+/* eslint-disable no-const-assign */
+/* eslint-disable no-undef */
 const todoList = require("../todo");
-let thisday = new Date().toLocaleDateString("en-CA");
 
 const { all, markAsComplete, add, overdue, dueToday, dueLater } = todoList();
 
-describe("Todolist Testing", () => {
+describe("TodoList test suite", () => {
   beforeAll(() => {
     add({
-      title: "Schedule a meeting",
+      title: "Test todo",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
   });
 
-  test("Add a new todo in list", () => {
-    
-
-    let length = all.length;
-
+  test("should add new todo", () => {
+    const todoItemCount = all.length;
     add({
-      title: "web development 201",
+      title: "Test todo",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
-
-    expect(all.length).toBe(length + 1);
+    expect(all.length).toBe(todoItemCount + 1);
   });
 
-  test("Mark todo as a completed", () => {
+  test("should mark a todo as complete", () => {
     expect(all[0].completed).toBe(false);
     markAsComplete(0);
     expect(all[0].completed).toBe(true);
   });
 
-  test("retrieve all todos that are overdue", () => {
-    let listOfTodos = overdue();
-
-    expect(
-      listOfTodos.every((todo) => {
-        return todo.dueDate < thisday;
-      })
-    ).toBe(true);
+  test("should retrieve OverDue items", () => {
+    const records = overdue().length;
+    add({
+      title: "Test todo 2",
+      completed: false,
+      dueDate: new Date(new Date().setDate(new Date().getDate() - 1))
+        .toISOString()
+        .split("T")[0],
+    });
+    expect(overdue().length).toBe(records + 1);
   });
 
-  test("retrieve all todos that are dueToday", () => {
-    let listOfTodos = dueToday();
-
-    expect(
-      listOfTodos.every((todo) => {
-        return todo.dueDate === thisday;
-      })
-    ).toBe(true);
+  test("should retrieve due today items", () => {
+    const records = dueToday().length;
+    add({
+      title: "Test todo 2",
+      completed: false,
+      dueDate: new Date().toLocaleDateString("en-CA"),
+    });
+    expect(dueToday().length).toBe(records + 1);
   });
 
-  test("retrieve all todos that are dueLater", () => {
-    let listOfTodos = dueLater();
-
-    expect(
-      listOfTodos.every((todo) => {
-        return todo.dueDate > thisday;
-      })
-    ).toBe(true);
+  test("should retrieve due later items", () => {
+    const records = dueLater().length;
+    add({
+      title: "Test todo 2",
+      completed: false,
+      dueDate: new Date(new Date().setDate(new Date().getDate() + 1))
+        .toISOString()
+        .split("T")[0],
+    });
+    expect(dueLater().length).toBe(records + 1);
   });
 });
